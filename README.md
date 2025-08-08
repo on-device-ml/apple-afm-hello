@@ -1,10 +1,14 @@
 # apple-afm-hello
 
+Explores new features of the 2025 Apple Foundation Models Framework via a simple chat interface
+
 ![apple-intelligence](https://github.com/on-device-ml/apple-afm-hello/blob/main/aah-screenshot.jpg)
+
+[Watch the video](https://youtu.be/u2TmntURokM)
 
 ## Overview
 Explores the basics of using Apple's on-device Intelligence Foundation Model, including:<br><br>
-    - Checking for Apple Intelligence on device<br>
+    - Checking the availability of Apple Intelligence on a device<br>
     - Configuring basic model parameters<br>
     - Prompting the foundation model<br>
     - Processing streaming output<br>
@@ -13,12 +17,13 @@ Explores the basics of using Apple's on-device Intelligence Foundation Model, in
 
 ⚡️ To get started, assuming a ~/MyProjects project folder:
 
+<pre>
 1) Clone apple-afm-hello to ~/MyProjects
 
-2) Use XCode to build ~/MyProjects/apple-afm-hello & run
+2) Use XCode to build ~/MyProjects/apple-afm-hello
 
-3) Enter a question then select ⏵
-
+3) Run & enter a question in the prompt field, then select ⏵
+</pre>
 
 ## Before We Start
 
@@ -33,8 +38,11 @@ and further refine output with tool calling using external data sources or servi
 offers Private Cloud Compute, which uses larger, server-based models running on Apple silicon while maintaining
 user privacy guarantees.
 
+- Requires macOS Tahoe 26+
 
-## Target Devices and O/S
+- Requires building with XCode 26+
+
+## Target Environment
 
 Modules targeted for these **Devices:**<br>
 <pre>
@@ -43,8 +51,9 @@ Modules targeted for these **Devices:**<br>
 
 ...**O/S versions:**<br>
 <pre>
-- macOS Tahoe 25 (25A5316i)
+- macOS Tahoe 26+
 </pre>
+
 
 ## Development and Test Environments
 
@@ -57,27 +66,18 @@ Modules created/tested using these **Devices:**<br>
 
 ...**O/S versions:**<br>
 <pre>
-- macOS Tahoe 25 (25A5316i)
+- macOS Tahoe 26 (25A5316i)
 </pre>
 
 ...**XCode versions:**<br>
 <pre>
-- XCode 26.0 beta (17A5285i)
+- XCode 26 beta (17A5241e)
+- XCode 26 beta (17A5285i)
 </pre>
     
 ...**Themes:**<br>
 <pre>
 Developed & tested mainly in dark mode 🌙
-</pre>
-
-## Using apple-afm-hello
-
-    
-## Known Issues/Observations
-
-These are some known issues:
-<pre>
-1. <br>
 </pre>
 
 

@@ -55,7 +55,7 @@ import FoundationModels
 /// --------------------------------------------------------------------------------
 /// Application Constants
 ///
-struct AppConstants {
+struct AppConst {
     
     struct Strings {
         
@@ -68,8 +68,8 @@ struct AppConstants {
     struct Fonts {
         
         // Other readable fonts: SF Pro
-        static let fontNormal=NSFont(name: "Avenir Next Regular", size: 18)
-        static let fontBold=NSFont(name: "Avenir Next Bold", size: 18)
+        static let fontNormal = NSFont(name: "Avenir Next Regular", size: 18)
+        static let fontBold = NSFont(name: "Avenir Next Bold", size: 18)
     }
     
     struct Attributes {
@@ -83,7 +83,7 @@ struct AppConstants {
         
         static let attrResponsePrompt: [NSAttributedString.Key: Any] = {
             return [
-                .font: AppConstants.Fonts.fontBold!,
+                .font: AppConst.Fonts.fontBold!,
                 .foregroundColor: NSColor(named:"ResponsePromptColor")!,
                 .paragraphStyle: paraAlignRight
             ]
@@ -91,14 +91,14 @@ struct AppConstants {
         
         static let attrResponse: [NSAttributedString.Key: Any] = {
             return [
-                .font: AppConstants.Fonts.fontNormal!,
+                .font: AppConst.Fonts.fontNormal!,
                 .foregroundColor: NSColor(named:"ResponseColor")!
             ]
         }()
         
         static let attrError: [NSAttributedString.Key: Any] = {
             return [
-                .font: AppConstants.Fonts.fontNormal!,
+                .font: AppConst.Fonts.fontNormal!,
                 .foregroundColor: NSColor(named:"ErrorColor")!
             ]
         }()
@@ -115,7 +115,7 @@ struct AppConstants {
         static let defaultRole = "You are a helpful assistant "
         
         // Max tokens allowed in a response
-        static let maximumResponseTokens = 4096 // Default: 1024
+        static let maximumResponseTokens = 1024 // Default: 1024
         
         // Temperature Reference: How creative/predictable the model is
         //
@@ -203,41 +203,41 @@ class ViewController: NSViewController {
 
         textRole.isEditable = true
         textRole.isSelectable = true
-        textRole.placeholderString = AppConstants.Strings.rolePlaceholder
-        textRole.string = AppConstants.Model.defaultRole
+        textRole.placeholderString = AppConst.Strings.rolePlaceholder
+        textRole.string = AppConst.Model.defaultRole
         textRole.textColor = NSColor(named: "RoleColor")
         textRole.backgroundColor = NSColor(named: "TextBackgroundColor")!
-        textRole.font = AppConstants.Fonts.fontNormal
-        textRole.textContainerInset = AppConstants.Display.displayInset;
-        textRole.toolTip = AppConstants.Strings.rolePlaceholder
+        textRole.font = AppConst.Fonts.fontNormal
+        textRole.textContainerInset = AppConst.Display.displayInset;
+        textRole.toolTip = AppConst.Strings.rolePlaceholder
         
         textPrompt.isEditable = true
         textPrompt.isSelectable = true
-        textPrompt.placeholderString = AppConstants.Strings.promptPlaceholder
+        textPrompt.placeholderString = AppConst.Strings.promptPlaceholder
         textPrompt.textColor = NSColor(named: "PromptColor")
         textPrompt.backgroundColor = NSColor(named: "TextBackgroundColor")!
-        textPrompt.font = AppConstants.Fonts.fontNormal
-        textPrompt.textContainerInset = AppConstants.Display.displayInset;
-        textPrompt.toolTip = AppConstants.Strings.promptPlaceholder
+        textPrompt.font = AppConst.Fonts.fontNormal
+        textPrompt.textContainerInset = AppConst.Display.displayInset;
+        textPrompt.toolTip = AppConst.Strings.promptPlaceholder
         
         textResponse.isEditable = false
         textResponse.isSelectable = true
         textResponse.textColor = NSColor(named: "ResponseColor")
         textResponse.backgroundColor = NSColor(named: "TextBackgroundColor")!
-        textResponse.font = AppConstants.Fonts.fontNormal
-        textResponse.textContainerInset = AppConstants.Display.displayInset;
+        textResponse.font = AppConst.Fonts.fontNormal
+        textResponse.textContainerInset = AppConst.Display.displayInset;
         
         textModelTemp.alignment = .center
         textModelTemp.translatesAutoresizingMaskIntoConstraints = false
-        textModelTemp.stringValue = String(format: "%0.1f",AppConstants.Model.tempDefault)
+        textModelTemp.stringValue = String(format: "%0.1f",AppConst.Model.tempDefault)
         
         sliderModelTemp.isContinuous = false
         sliderModelTemp.target = self
         sliderModelTemp.action = #selector(sliderValueChanged(_:))
-        sliderModelTemp.minValue = AppConstants.Model.tempMin
-        sliderModelTemp.maxValue = AppConstants.Model.tempMax
-        sliderModelTemp.doubleValue = AppConstants.Model.tempDefault
-        let numTicks = Int((AppConstants.Model.tempMax-AppConstants.Model.tempMin)/0.1)
+        sliderModelTemp.minValue = AppConst.Model.tempMin
+        sliderModelTemp.maxValue = AppConst.Model.tempMax
+        sliderModelTemp.doubleValue = AppConst.Model.tempDefault
+        let numTicks = Int((AppConst.Model.tempMax-AppConst.Model.tempMin)/0.1)
         sliderModelTemp.numberOfTickMarks = numTicks
         sliderModelTemp.allowsTickMarkValuesOnly = true
         
@@ -256,14 +256,15 @@ class ViewController: NSViewController {
     ///
     override func viewWillAppear() {
         
-        self.view.window?.title = AppConstants.Strings.appTitle
+        self.view.window?.title = AppConst.Strings.appTitle
     
         // Initialize our model
-        self.modelAvailable = self.checkModelAvailable()
+        self.modelAvailable = self.checkAFMAvailable()
         if ( !self.modelAvailable ) {
             
             self.printError(msg: "􀇾 Cannot proceed")
-            self.toggleControls(enabled: false)
+            self.toggleControls(enabled: false,
+                                stopEnabled: false)
         }
     }
     
@@ -274,7 +275,7 @@ class ViewController: NSViewController {
     ///
     /// - Returns: Bool - the status of the operation
     ///
-    func checkModelAvailable() -> Bool {
+    func checkAFMAvailable() -> Bool {
         
         if #unavailable(macOS 15) {
             fatalError("􀇾 This app requires macOS 15 or later to use Apple Foundation Models")
@@ -295,7 +296,8 @@ class ViewController: NSViewController {
                     @unknown default:
                     printError(msg: "􀇾 The SystemLanguageModel is not available.")
                 }
-                self.toggleControls(enabled: false)
+                self.toggleControls(enabled: false,
+                                stopEnabled: false)
                 return false
             
             case .available:
@@ -324,12 +326,12 @@ class ViewController: NSViewController {
         
         // Reset Fields
         self.textRole.isEditable = true;
-        self.textRole.string = AppConstants.Model.defaultRole
+        self.textRole.string = AppConst.Model.defaultRole
         self.textPrompt.string = ""
         self.textResponse.string = ""
         self.shouldStop = false
-        sliderModelTemp.doubleValue = AppConstants.Model.tempDefault
-        textModelTemp.stringValue = String( format: "%0.1f", AppConstants.Model.tempDefault)
+        sliderModelTemp.doubleValue = AppConst.Model.tempDefault
+        textModelTemp.stringValue = String( format: "%0.1f", AppConst.Model.tempDefault)
     }
     
     /// --------------------------------------------------------------------------------
@@ -345,6 +347,11 @@ class ViewController: NSViewController {
             return
         }
         self.shouldStop = true
+        
+        // Wait some time, then update this with a usage message
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.btnClear(self)
+        }
     }
     
     /// --------------------------------------------------------------------------------
@@ -372,9 +379,10 @@ class ViewController: NSViewController {
                     
         // Role
         var role : String = self.textRole.string
+        role = role.trimmingCharacters(in: .whitespacesAndNewlines)
         if ( role.isEmpty ) {
-            role = AppConstants.Model.defaultRole
-            self.textRole.string = AppConstants.Model.defaultRole
+            role = AppConst.Model.defaultRole
+            self.textRole.string = AppConst.Model.defaultRole
         }
         
         // Temperature
@@ -387,11 +395,11 @@ class ViewController: NSViewController {
         
         Task {
             
-            // Initialize our model options (Ref: AppConstants.Model for info)
+            // Initialize our model options (Ref: AppConst.Model for info)
             let options = GenerationOptions(
-                sampling: .random(top: AppConstants.Model.topK),
+                sampling: .random(top: AppConst.Model.topK),
                 temperature: tempSelected,
-                maximumResponseTokens: AppConstants.Model.maximumResponseTokens)
+                maximumResponseTokens: AppConst.Model.maximumResponseTokens)
             
             // Start text generation
             let stream = self.llmSession!.streamResponse(to: prompt,
@@ -409,7 +417,7 @@ class ViewController: NSViewController {
                 // Append whats changed
                 let delta = String(thisChunk.dropFirst(lastChunk.count))
                 self.appendResponse(text: delta,
-                                    attr: AppConstants.Attributes.attrResponse as NSDictionary)
+                                    attr: AppConst.Attributes.attrResponse as NSDictionary)
                 
                 lastChunk = thisChunk
             }
@@ -441,7 +449,7 @@ class ViewController: NSViewController {
     func printError(msg: String) {
         
         self.appendResponse(text: msg,
-                            attr: AppConstants.Attributes.attrError as NSDictionary )
+                            attr: AppConst.Attributes.attrError as NSDictionary )
     }
     
     /// --------------------------------------------------------------------------------
@@ -460,7 +468,7 @@ class ViewController: NSViewController {
             }
             let text = String(format:"%@%@\n\n",nl,prompt)
             self.appendResponse( text: text,
-                                 attr: AppConstants.Attributes.attrResponsePrompt as NSDictionary )
+                                 attr: AppConst.Attributes.attrResponsePrompt as NSDictionary )
         }
     }
 
@@ -513,7 +521,8 @@ class ViewController: NSViewController {
             if ( self.textResponse.string.isEmpty ) {
                 self.textRole.isEditable = false;
             }
-            self.toggleControls(enabled: false)
+            self.toggleControls(enabled: false,
+                            stopEnabled: true)
             self.progressInference.startAnimation(self)
         }
     }
@@ -525,8 +534,9 @@ class ViewController: NSViewController {
         
         DispatchQueue.main.async {
             self.appendResponse(text: "\n",
-                                attr: AppConstants.Attributes.attrResponse as NSDictionary)
-            self.toggleControls(enabled: true)
+                                attr: AppConst.Attributes.attrResponse as NSDictionary)
+            self.toggleControls(enabled: true,
+                            stopEnabled: false)
             self.progressInference.stopAnimation(self)
         }
     }
@@ -537,12 +547,14 @@ class ViewController: NSViewController {
     /// - Parameters:
     ///   - enabled: whether the controls are enabled
     ///
-    private func toggleControls(enabled : Bool) {
+    private func toggleControls(enabled: Bool,
+                                stopEnabled: Bool) {
         
         DispatchQueue.main.async {
             
             self.textPrompt.isEditable = enabled
             self.btnClear.isEnabled = enabled
+            self.btnStop.isEnabled = stopEnabled
             self.btnGenerate.isEnabled = enabled
         }
     }

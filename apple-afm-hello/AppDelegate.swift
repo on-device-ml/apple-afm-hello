@@ -14,7 +14,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Set the minimum window size
         let window = NSApplication.shared.windows.first
-        window?.minSize = AppConstants.Display.displayMinSize
+        window?.minSize = AppConst.Display.displayMinSize
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
