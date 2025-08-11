@@ -105,4 +105,4 @@ Developed & tested mainly in dark mode 🌙
 
 ## Feedback and Contributions
 
-Feedback & suggestions are welcome! Please, feel free to [get in touch](https://github.com/apple-intelligence/apple-afm-hello).
+Feedback & suggestions are welcome! Please, feel free to [get in touch](https://github.com/on-device-ml/apple-afm-hello/issues/new).
