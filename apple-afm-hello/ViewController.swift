@@ -406,7 +406,7 @@ class ViewController: NSViewController {
                                                     options: options)
             
             // Stream the output to the response field
-            var lastChunk : String = ""
+            var lastChunkSize = 0
             for try await thisChunk in stream {
                 
                 // Have we been asked to stop?
@@ -415,11 +415,12 @@ class ViewController: NSViewController {
                 }
                 
                 // Append whats changed
-                let delta = String(thisChunk.dropFirst(lastChunk.count))
-                self.appendResponse(text: delta,
+                let delta = String(thisChunk.content).dropFirst(lastChunkSize)
+                self.appendResponse(text: String(delta),
                                     attr: AppConst.Attributes.attrResponse as NSDictionary)
                 
-                lastChunk = thisChunk
+                // Save this chunk size
+                lastChunkSize = thisChunk.content.count
             }
             
             // Update controls following responses
