@@ -66,14 +66,15 @@ Modules created/tested using these **Devices:**<br>
 
 ...**O/S versions:**<br>
 <pre>
-- macOS Tahoe 26 (25A5316i)
-- macOS Tahoe 26 (25A5327h)
+- macOS Tahoe 26 (25A5316i) Beta 4
+- macOS Tahoe 26 (25A5327h) Beta 5
+- macOS Tahoe 26 (25A5338b) Beta 6
 </pre>
 
 ...**XCode versions:**<br>
 <pre>
-- XCode 26 beta (17A5285i)
-- XCode 26 beta (17A5295f)
+- XCode 26 beta (17A5285i) Beta 4
+- XCode 26 beta (17A5295f) Beta 5
 </pre>
     
 ...**Themes:**<br>
